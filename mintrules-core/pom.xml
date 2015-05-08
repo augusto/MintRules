@@ -11,7 +11,7 @@
     <artifactId>mintrules-core</artifactId>
     <packaging>jar</packaging>
 
-    <name>Easy Rules core module</name>
+    <name>Mint Rules core module</name>
 
     <dependencies>
         <dependency>

@@ -15,6 +15,7 @@
 
     <modules>
         <module>mintrules-core</module>
+        <module>mintrules-samples</module>
     </modules>
 
     <packaging>pom</packaging>
