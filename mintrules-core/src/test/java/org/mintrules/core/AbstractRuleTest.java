@@ -39,7 +39,7 @@ class PrioritisedRule extends AbstractRule<String> {
     }
 
     @Override
-    public String performAction() {
+    public String performAction(Session session) {
         return null;
     }
 }

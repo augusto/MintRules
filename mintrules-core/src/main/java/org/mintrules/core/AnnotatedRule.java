@@ -61,9 +61,16 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
     }
 
     @Override
-    public R performAction() {
+    public R performAction(Session session) {
         try {
-            return (R) actionMethod.invoke(rule);
+            Class<?>[] parameterTypes = actionMethod.getParameterTypes();
+            Object arguments[] = new Object[parameterTypes.length];
+
+            for (int i = 0; i < parameterTypes.length; i++) {
+                arguments[i] = session.getByType(parameterTypes[i]);
+            }
+
+            return (R) actionMethod.invoke(rule, arguments);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {

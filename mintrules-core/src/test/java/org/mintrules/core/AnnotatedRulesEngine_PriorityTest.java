@@ -2,6 +2,7 @@ package org.mintrules.core;
 
 import org.junit.Test;
 import org.mintrules.api.Rule;
+import org.mintrules.api.Session;
 import org.mintrules.core.AnnotatedRulesEngine;
 import org.mintrules.testrules.BasicPrioritisedWellFormedRule;
 import org.mintrules.testrules.BasicWellFormedRule;
@@ -34,10 +35,11 @@ public class AnnotatedRulesEngine_PriorityTest {
 
         annotatedRulesEngine.registerRule(rule1);
         annotatedRulesEngine.registerRule(rule2);
+        Session session = annotatedRulesEngine.createSession();
 
         assertThat(annotatedRulesEngine.getSortedRules()).hasSize(2);
-        assertThat(annotatedRulesEngine.getSortedRules().get(0).performAction()).isEqualTo("rule2");
-        assertThat(annotatedRulesEngine.getSortedRules().get(1).performAction()).isEqualTo("rule1");
+        assertThat(annotatedRulesEngine.getSortedRules().get(0).performAction(session)).isEqualTo("rule2");
+        assertThat(annotatedRulesEngine.getSortedRules().get(1).performAction(session)).isEqualTo("rule1");
     }
 }
 
