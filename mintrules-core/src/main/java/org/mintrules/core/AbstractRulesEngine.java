@@ -26,16 +26,12 @@ package org.mintrules.core;
 
 import org.mintrules.api.RulesEngine;
 
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  * Abstract rules engine class. Deals with the core features of the rules engine
- *
+ * <p/>
  * <ul>
- *     <li>Ordering</li>
- *     <li>Execution of the rules</li>
+ * <li>Ordering</li>
+ * <li>Execution of the rules</li>
  * </ul>
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)

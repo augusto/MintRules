@@ -7,8 +7,6 @@ import org.mintrules.annotation.Condition;
 import org.mintrules.annotation.Rule;
 import org.mintrules.api.Session;
 
-import java.math.BigDecimal;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -67,7 +65,7 @@ class ActionInjectByType {
     }
 
     @Action
-    public String action( String string, int number) {
+    public String action(String string, int number) {
         return string + "-" + number;
     }
 }

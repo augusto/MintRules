@@ -1,7 +1,6 @@
 package org.mintrules.core;
 
 import org.junit.Test;
-import org.mintrules.core.AnnotatedRulesEngine;
 import org.mintrules.testrules.BasicWellFormedRule;
 
 import static org.assertj.core.api.Assertions.assertThat;

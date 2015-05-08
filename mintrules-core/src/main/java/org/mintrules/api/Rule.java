@@ -27,7 +27,7 @@ package org.mintrules.api;
 
 /**
  * Abstraction for a rule that can be fired by the rules engine.
- *
+ * <p/>
  * Rules are registered in the rules engine registry and must have a <strong>unique</strong> name.
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
@@ -36,24 +36,28 @@ public interface Rule<R> {
 
     /**
      * Getter for rule name.
+     *
      * @return the rule name
      */
     String getName();
 
     /**
      * Getter for rule description.
+     *
      * @return rule description
      */
     String getDescription();
 
     /**
      * Getter for rule priority.
+     *
      * @return rule priority
      */
     int getPriority();
 
     /**
      * Rule conditions abstraction : this method encapsulates the rule's conditions.
+     *
      * @return true if the rule should be applied, false else
      */
     boolean evaluateCondition(Session session);

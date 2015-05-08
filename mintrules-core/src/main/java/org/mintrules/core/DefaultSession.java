@@ -2,7 +2,8 @@ package org.mintrules.core;
 
 import org.mintrules.api.Session;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import static java.lang.String.format;
 
@@ -12,7 +13,8 @@ import static java.lang.String.format;
 public class DefaultSession implements Session {
 
     public Map<String, Object> elements = new HashMap<String, Object>();
-    public Map<Class, Class> primitiveTypes = new HashMap<Class,Class>();
+    public Map<Class, Class> primitiveTypes = new HashMap<Class, Class>();
+
     {
         primitiveTypes.put(boolean.class, Boolean.class);
         primitiveTypes.put(byte.class, Byte.class);
@@ -42,12 +44,12 @@ public class DefaultSession implements Session {
         Map.Entry<String, Object> candidate = null;
         Class<?> actualType = getActualType(parameterType);
 
-        for (Map.Entry<String, Object> entry : elements.entrySet()){
-            if(entry.getValue().getClass().isAssignableFrom(actualType)) {
-                if( candidate == null) {
+        for (Map.Entry<String, Object> entry : elements.entrySet()) {
+            if (entry.getValue().getClass().isAssignableFrom(actualType)) {
+                if (candidate == null) {
                     candidate = entry;
                 } else {
-                    if(sb.length() == 0) {
+                    if (sb.length() == 0) {
                         sb.append('\'').append(candidate.getKey()).append('\'');
                     }
                     sb.append(", '").append(entry.getKey()).append('\'');
@@ -55,9 +57,9 @@ public class DefaultSession implements Session {
             }
         }
 
-        if( candidate == null) {
+        if (candidate == null) {
             throw new RuntimeException("Couldn't find an instance of " + actualType.getCanonicalName());
-        } else if( sb.length() >0) {
+        } else if (sb.length() > 0) {
             String message = format("More than one instance of %s was found [%s]", actualType.getCanonicalName(), sb);
             throw new RuntimeException(message);
         }
@@ -73,10 +75,10 @@ public class DefaultSession implements Session {
      */
     private Class<?> getActualType(Class<?> parameterType) {
         Class<?> actualType;
-        if( primitiveTypes.containsKey(parameterType)) {
+        if (primitiveTypes.containsKey(parameterType)) {
             actualType = primitiveTypes.get(parameterType);
         } else {
-            actualType= parameterType;
+            actualType = parameterType;
         }
         return actualType;
     }

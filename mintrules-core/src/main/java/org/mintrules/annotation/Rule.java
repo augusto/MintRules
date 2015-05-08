@@ -45,6 +45,7 @@ public @interface Rule {
 
     /**
      * The rule description.
+     *
      * @return The rule description
      */
     public String description() default "No Description";

@@ -6,7 +6,7 @@ import org.mintrules.api.Rule;
  * Abstract Rule. This class is responsible for dealing with the common behaviour in the rules, such as holding the
  * priority.
  */
-public abstract class AbstractRule<R> implements Comparable<Rule>, Rule<R>{
+public abstract class AbstractRule<R> implements Comparable<Rule>, Rule<R> {
     private int priority;
 
     public AbstractRule(int priority) {
@@ -20,7 +20,7 @@ public abstract class AbstractRule<R> implements Comparable<Rule>, Rule<R>{
 
     @Override
     public int compareTo(Rule other) {
-        return  this.priority - other.getPriority();
+        return this.priority - other.getPriority();
     }
 
     @Override

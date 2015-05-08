@@ -1,13 +1,9 @@
 package org.mintrules.core;
 
 import org.junit.Test;
-import org.mintrules.api.Rule;
 import org.mintrules.api.Session;
-import org.mintrules.core.AnnotatedRulesEngine;
 import org.mintrules.testrules.BasicPrioritisedWellFormedRule;
 import org.mintrules.testrules.BasicWellFormedRule;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

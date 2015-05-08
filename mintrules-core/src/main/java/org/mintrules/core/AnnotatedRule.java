@@ -91,7 +91,7 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
     private static int getAnnotatedPriority(Object rule) {
         Method priorityMethod = getAnnotatedMethod(rule, Priority.class);
 
-        if(priorityMethod == null ) {
+        if (priorityMethod == null) {
             return DEFAULT_RULE_PRIORITY;
         } else {
             try {
@@ -108,7 +108,7 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
         Rule annotation = rule.getClass().getAnnotation(Rule.class);
 
         String name = annotation.name();
-        if( name.isEmpty() ) {
+        if (name.isEmpty()) {
             name = rule.getClass().getCanonicalName();
         }
 

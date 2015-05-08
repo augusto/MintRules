@@ -1,7 +1,5 @@
 package org.mintrules.testrules;
 
-import org.mintrules.annotation.Action;
-import org.mintrules.annotation.Condition;
 import org.mintrules.annotation.Priority;
 import org.mintrules.annotation.Rule;
 
@@ -9,7 +7,7 @@ import org.mintrules.annotation.Rule;
  *
  */
 @Rule()
-public class BasicPrioritisedWellFormedRule extends BasicWellFormedRule{
+public class BasicPrioritisedWellFormedRule extends BasicWellFormedRule {
 
     private final int priority;
 
