@@ -3,9 +3,6 @@ package org.mintrules.testrules;
 import org.mintrules.annotation.Priority;
 import org.mintrules.annotation.Rule;
 
-/**
- *
- */
 @Rule()
 public class BasicPrioritisedWellFormedRule extends BasicWellFormedRule {
 

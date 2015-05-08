@@ -15,31 +15,31 @@ public class AbstractRuleTest {
 
         assertThat(priorityOne.compareTo(priorityFive)).isLessThan(0);
     }
-}
 
-class PrioritisedRule extends AbstractRule<String> {
+    class PrioritisedRule extends AbstractRule<String> {
 
-    public PrioritisedRule(int priority) {
-        super(priority);
-    }
+        public PrioritisedRule(int priority) {
+            super(priority);
+        }
 
-    @Override
-    public String getName() {
-        return null;
-    }
+        @Override
+        public String getName() {
+            return null;
+        }
 
-    @Override
-    public String getDescription() {
-        return null;
-    }
+        @Override
+        public String getDescription() {
+            return null;
+        }
 
-    @Override
-    public boolean evaluateCondition(Session session) {
-        return false;
-    }
+        @Override
+        public boolean evaluateCondition(Session session) {
+            return false;
+        }
 
-    @Override
-    public String performAction(Session session) {
-        return null;
+        @Override
+        public String performAction(Session session) {
+            return null;
+        }
     }
 }

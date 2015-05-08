@@ -46,10 +46,11 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
     public boolean evaluateCondition(Session session) {
         try {
             Class<?>[] parameterTypes = conditionMethod.getParameterTypes();
+            Annotation[][] parameterAnnotations = conditionMethod.getParameterAnnotations();
             Object arguments[] = new Object[parameterTypes.length];
 
             for (int i = 0; i < parameterTypes.length; i++) {
-                arguments[i] = session.getByType(parameterTypes[i]);
+                arguments[i] = session.getValue(parameterTypes[i], parameterAnnotations[i]);
             }
 
             return (Boolean) conditionMethod.invoke(rule, arguments);
@@ -64,10 +65,13 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
     public R performAction(Session session) {
         try {
             Class<?>[] parameterTypes = actionMethod.getParameterTypes();
+            Annotation[][] parameterAnnotations = actionMethod.getParameterAnnotations();
             Object arguments[] = new Object[parameterTypes.length];
 
             for (int i = 0; i < parameterTypes.length; i++) {
-                arguments[i] = session.getByType(parameterTypes[i]);
+                if( parameterAnnotations.length > 0) {
+                    arguments[i] = session.getValue(parameterTypes[i], parameterAnnotations[i]);
+                }
             }
 
             return (R) actionMethod.invoke(rule, arguments);

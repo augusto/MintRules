@@ -1,5 +1,7 @@
 package org.mintrules.api;
 
+import java.lang.annotation.Annotation;
+
 /**
  * Represents a session of the rules engine. The session contain all the state required by the rules as the engine
  * executes.
@@ -36,5 +38,5 @@ public interface Session {
      * <p/>
      * TODO THROWS: if not found or if more than one found
      */
-    Object getByType(Class<?> parameterType);
+    Object getValue(Class<?> parameterType, Annotation[] parameterAnnotation);
 }

@@ -1,7 +1,9 @@
 package org.mintrules.core;
 
+import org.mintrules.annotation.Value;
 import org.mintrules.api.Session;
 
+import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +41,26 @@ public class DefaultSession implements Session {
     }
 
     @Override
-    public Object getByType(Class<?> parameterType) {
+    public Object getValue(Class<?> parameterType, Annotation[] annotations) {
+
+        for (int i = 0; i < annotations.length; i++) {
+            if( annotations[i].annotationType().equals(Value.class)) {
+                String key = ((Value)annotations[i]).value();
+                if(!elements.containsKey(key)) {
+                    throw new RuntimeException("Couldn't find a parameter with the value '" + key + "'");
+                }
+                Object value = elements.get(key);
+                if( !value.getClass().isAssignableFrom(parameterType)) {
+                    throw new RuntimeException("Incompatible types. The parameter with key '" + key + "' requires an " +
+                            "instance of " + parameterType.getCanonicalName() + ", but got an instance of " +
+                    value.getClass().getCanonicalName());
+                }
+
+                return value;
+            }
+        }
+
+
         StringBuilder sb = new StringBuilder(0);
         Map.Entry<String, Object> candidate = null;
         Class<?> actualType = getActualType(parameterType);

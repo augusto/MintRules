@@ -5,9 +5,6 @@ import org.mintrules.testrules.BasicWellFormedRule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Created by augusto on 08/05/2015.
- */
 public class AnnotatedRulesEngine_BasicTest {
 
     @Test

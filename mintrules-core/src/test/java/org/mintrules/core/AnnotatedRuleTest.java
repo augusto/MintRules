@@ -35,19 +35,19 @@ public class AnnotatedRuleTest {
 
         Assertions.assertThat(annotatedRule.getDescription()).isEqualTo("custom description");
     }
-}
 
-@Rule(name = "custom name", description = "custom description")
-class NamedRule {
+    @Rule(name = "custom name", description = "custom description")
+    class NamedRule {
 
-    @Condition
-    public boolean condition() {
-        return false;
+        @Condition
+        public boolean condition() {
+            return false;
+        }
+
+        @Action
+        public void action() {
+
+        }
+
     }
-
-    @Action
-    public void action() {
-
-    }
-
 }

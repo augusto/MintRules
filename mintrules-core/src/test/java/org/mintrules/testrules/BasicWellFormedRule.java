@@ -4,9 +4,6 @@ import org.mintrules.annotation.Action;
 import org.mintrules.annotation.Condition;
 import org.mintrules.annotation.Rule;
 
-/**
- *
- */
 @Rule
 public class BasicWellFormedRule {
 
