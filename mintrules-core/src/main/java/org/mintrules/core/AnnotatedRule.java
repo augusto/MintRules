@@ -4,6 +4,7 @@ import org.mintrules.annotation.Action;
 import org.mintrules.annotation.Condition;
 import org.mintrules.annotation.Priority;
 import org.mintrules.annotation.Rule;
+import org.mintrules.api.Session;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -42,9 +43,16 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
     }
 
     @Override
-    public boolean evaluateCondition() {
+    public boolean evaluateCondition(Session session) {
         try {
-            return (Boolean) conditionMethod.invoke(rule);
+            Class<?>[] parameterTypes = conditionMethod.getParameterTypes();
+            Object arguments[] = new Object[parameterTypes.length];
+
+            for (int i = 0; i < parameterTypes.length; i++) {
+                arguments[i] = session.getByType(parameterTypes[i]);
+            }
+
+            return (Boolean) conditionMethod.invoke(rule, arguments);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {

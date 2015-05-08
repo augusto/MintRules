@@ -1,6 +1,7 @@
 package org.mintrules.core;
 
 import org.junit.Test;
+import org.mintrules.api.Session;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,7 +34,7 @@ class PrioritisedRule extends AbstractRule<String> {
     }
 
     @Override
-    public boolean evaluateCondition() {
+    public boolean evaluateCondition(Session session) {
         return false;
     }
 

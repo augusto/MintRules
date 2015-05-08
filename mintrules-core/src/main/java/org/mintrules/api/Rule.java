@@ -56,7 +56,7 @@ public interface Rule<R> {
      * Rule conditions abstraction : this method encapsulates the rule's conditions.
      * @return true if the rule should be applied, false else
      */
-    boolean evaluateCondition();
+    boolean evaluateCondition(Session session);
 
     /**
      * Rule actions abstraction : this method encapsulates the rule's actions.

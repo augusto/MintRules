@@ -25,9 +25,9 @@
 package org.mintrules.core;
 
 import org.mintrules.api.Rule;
+import org.mintrules.api.Session;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -48,15 +48,20 @@ public class AnnotatedRulesEngine<R> extends AbstractRulesEngine<R> {
     }
 
     @Override
-    public R fireRules() {
+    public R fireRules(Session session) {
         getSortedRules();
         for (Rule<R> rule : rules) {
-            if (rule.evaluateCondition()) {
+            if (rule.evaluateCondition(session)) {
                 return rule.performAction();
             }
         }
 
         return null;
+    }
+
+    @Override
+    public Session createSession() {
+        return new DefaultSession();
     }
 
     public List<Rule<R>> getSortedRules() {

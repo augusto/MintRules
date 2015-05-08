@@ -22,7 +22,7 @@ public class AnnotatedRulesEngine_PriorityTest {
         annotatedRulesEngine.registerRule(new BasicPrioritisedWellFormedRule(true, "first", 5));
         annotatedRulesEngine.registerRule(new BasicPrioritisedWellFormedRule(true, "second", 1));
 
-        assertThat(annotatedRulesEngine.fireRules()).isEqualTo("second");
+        assertThat(annotatedRulesEngine.fireRules(annotatedRulesEngine.createSession())).isEqualTo("second");
     }
 
 

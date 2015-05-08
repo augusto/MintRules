@@ -17,7 +17,7 @@ public class AnnotatedRulesEngine_BasicTest {
         AnnotatedRulesEngine<String> annotatedRulesEngine = new AnnotatedRulesEngine<String>();
         annotatedRulesEngine.registerRule(new BasicWellFormedRule(true, "expected"));
 
-        assertThat(annotatedRulesEngine.fireRules()).isEqualTo("expected");
+        assertThat(annotatedRulesEngine.fireRules(annotatedRulesEngine.createSession())).isEqualTo("expected");
     }
 
     @Test
@@ -27,7 +27,7 @@ public class AnnotatedRulesEngine_BasicTest {
         annotatedRulesEngine.registerRule(new BasicWellFormedRule(false, "notExpected"));
         annotatedRulesEngine.registerRule(new BasicWellFormedRule(true, "expected"));
 
-        assertThat(annotatedRulesEngine.fireRules()).isEqualTo("expected");
+        assertThat(annotatedRulesEngine.fireRules(annotatedRulesEngine.createSession())).isEqualTo("expected");
     }
 
 }

@@ -36,6 +36,12 @@ public interface RulesEngine<R> {
      *
      * @return value
      */
-    R fireRules();
+    R fireRules(Session session);
 
+    /**
+     * Creates a new session bound to the rules engine.
+     *
+     * @return
+     */
+    Session createSession();
 }
