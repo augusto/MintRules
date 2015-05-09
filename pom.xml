@@ -21,7 +21,7 @@
     <packaging>pom</packaging>
 
     <name>Mint Rules</name>
-    <description>Mint Rules is a simple java rules engine heavily inspired in Easy Rules</description>
+    <description>Mint Rules is a simple java rules engine heavily inspired in Easy Rules by Mahmoud Ben Hassine</description>
     <url>http://www.tbd.org</url>
 
     <properties>
