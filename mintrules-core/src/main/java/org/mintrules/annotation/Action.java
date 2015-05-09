@@ -6,9 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation to mark a method as a rule action.
- * Must annotate any public method with no arguments.
- * The method return value will be ignored by the engine.
+ * Annotation to mark a method as a rule action. All methods in a Rules engine must return the same type or subclass
+ * of it.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

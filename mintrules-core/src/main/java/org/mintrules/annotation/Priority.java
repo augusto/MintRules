@@ -7,7 +7,13 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation to mark the method to execute to get rule priority.
- * Must annotate any public method with no arguments and that returns an integer value.
+ * The method must
+ *
+ * <ul>
+ *     <li>Receive no parameters</li>
+ *     <li>Return an integer</li>
+ *     <li>Should always return the same value</li>
+ * </ul>
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

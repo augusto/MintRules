@@ -8,9 +8,9 @@ import java.util.List;
 
 /**
  * Annotated rules engine, configures the rules engine by reading annotations in the classes.
+ * All registered rules must return R from their action methods.
  */
 public class AnnotatedRulesEngine<R> extends AbstractRulesEngine<R> {
-
 
     private List<Rule<R>> rules = new ArrayList<Rule<R>>();
 
@@ -25,8 +25,7 @@ public class AnnotatedRulesEngine<R> extends AbstractRulesEngine<R> {
 
     @Override
     public R fireRules(Session session) {
-        getSortedRules();
-        for (Rule<R> rule : rules) {
+        for (Rule<R> rule : getSortedRules()) {
             if (rule.evaluateCondition(session)) {
                 return rule.executeAction(session);
             }
@@ -40,6 +39,12 @@ public class AnnotatedRulesEngine<R> extends AbstractRulesEngine<R> {
         return new DefaultSession();
     }
 
+    /**
+     * Returns all the registered rules. The list is sorted in the same order as the rules are executed, which makes
+     * this method useful for debugging issues.
+     *
+     * @return List of registered rules.
+     */
     public List<Rule<R>> getSortedRules() {
         rules.sort(null);
         return rules;

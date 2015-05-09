@@ -31,3 +31,6 @@ type (or a subclass of it).
 * Add more and better examples
     * using sessions to pass values between rules
     * using sessions to retrieve values at the end
+* Add logging (maybe with bridges for JUL and slf4j)
+* ability to set rule name/description at the time the rule is registered (to report nicer names/descriptions when
+  the same rule is used with different parameters.
