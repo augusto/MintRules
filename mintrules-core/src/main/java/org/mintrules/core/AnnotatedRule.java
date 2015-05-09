@@ -69,7 +69,7 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
             Object arguments[] = new Object[parameterTypes.length];
 
             for (int i = 0; i < parameterTypes.length; i++) {
-                if( parameterAnnotations.length > 0) {
+                if (parameterAnnotations.length > 0) {
                     arguments[i] = session.getValue(parameterTypes[i], parameterAnnotations[i]);
                 }
             }

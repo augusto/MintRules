@@ -14,7 +14,7 @@ public class ValidateEmailRule {
 
     @Condition
     public boolean when(Person person) {
-        return ! emailValidation.matcher(person.getEmail()).matches();
+        return !emailValidation.matcher(person.getEmail()).matches();
     }
 
     @Action

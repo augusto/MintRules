@@ -44,16 +44,16 @@ public class DefaultSession implements Session {
     public Object getValue(Class<?> parameterType, Annotation[] annotations) {
 
         for (int i = 0; i < annotations.length; i++) {
-            if( annotations[i].annotationType().equals(Value.class)) {
-                String key = ((Value)annotations[i]).value();
-                if(!elements.containsKey(key)) {
+            if (annotations[i].annotationType().equals(Value.class)) {
+                String key = ((Value) annotations[i]).value();
+                if (!elements.containsKey(key)) {
                     throw new RuntimeException("Couldn't find a parameter with the value '" + key + "'");
                 }
                 Object value = elements.get(key);
-                if( !value.getClass().isAssignableFrom(parameterType)) {
+                if (!value.getClass().isAssignableFrom(parameterType)) {
                     throw new RuntimeException("Incompatible types. The parameter with key '" + key + "' requires an " +
                             "instance of " + parameterType.getCanonicalName() + ", but got an instance of " +
-                    value.getClass().getCanonicalName());
+                            value.getClass().getCanonicalName());
                 }
 
                 return value;

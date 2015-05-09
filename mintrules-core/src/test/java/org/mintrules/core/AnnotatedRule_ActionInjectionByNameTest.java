@@ -58,7 +58,7 @@ public class AnnotatedRule_ActionInjectionByNameTest {
     @Rule
     class ActionInjectByType {
         @Condition
-        public boolean when(){
+        public boolean when() {
             return true;
         }
 

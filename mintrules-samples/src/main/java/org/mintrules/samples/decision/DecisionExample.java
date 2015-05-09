@@ -1,6 +1,5 @@
 package org.mintrules.samples.decision;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.mintrules.api.Session;
@@ -16,10 +15,10 @@ public class DecisionExample {
     public void setup() {
         rulesEngine = new AnnotatedRulesEngine<Double>();
 
-        rulesEngine.registerRule(new ChargeRule(0,6,1.5));
-        rulesEngine.registerRule(new ChargeRule(6,8,1.2));
-        rulesEngine.registerRule(new ChargeRule(8,18,1));
-        rulesEngine.registerRule(new ChargeRule(18,24,1.2));
+        rulesEngine.registerRule(new ChargeRule(0, 6, 1.5));
+        rulesEngine.registerRule(new ChargeRule(6, 8, 1.2));
+        rulesEngine.registerRule(new ChargeRule(8, 18, 1));
+        rulesEngine.registerRule(new ChargeRule(18, 24, 1.2));
     }
 
     @Test
