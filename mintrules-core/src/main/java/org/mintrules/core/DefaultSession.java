@@ -4,6 +4,7 @@ import org.mintrules.annotation.Value;
 import org.mintrules.api.Session;
 
 import java.lang.annotation.Annotation;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,8 +15,8 @@ import static java.lang.String.format;
  */
 public class DefaultSession implements Session {
 
-    public Map<String, Object> elements = new HashMap<String, Object>();
-    public Map<Class, Class> primitiveTypes = new HashMap<Class, Class>();
+    private Map<String, Object> elements = new HashMap<String, Object>();
+    private Map<Class, Class> primitiveTypes = new HashMap<Class, Class>();
 
     {
         primitiveTypes.put(boolean.class, Boolean.class);
@@ -28,6 +29,10 @@ public class DefaultSession implements Session {
         primitiveTypes.put(short.class, Short.class);
         primitiveTypes.put(int.class, Integer.class);
         primitiveTypes.put(long.class, Long.class);
+    }
+
+    public DefaultSession() {
+        put(this);
     }
 
     @Override
@@ -102,5 +107,9 @@ public class DefaultSession implements Session {
             actualType = parameterType;
         }
         return actualType;
+    }
+
+    public Map<String,Object> getElements() {
+        return Collections.unmodifiableMap(elements);
     }
 }
