@@ -38,7 +38,7 @@ public class AbstractRuleTest {
         }
 
         @Override
-        public String performAction(Session session) {
+        public String executeAction(Session session) {
             return null;
         }
     }

@@ -28,7 +28,7 @@ public class AnnotatedRulesEngine<R> extends AbstractRulesEngine<R> {
         getSortedRules();
         for (Rule<R> rule : rules) {
             if (rule.evaluateCondition(session)) {
-                return rule.performAction(session);
+                return rule.executeAction(session);
             }
         }
 

@@ -5,10 +5,12 @@ import org.mintrules.annotation.Condition;
 import org.mintrules.annotation.Priority;
 import org.mintrules.annotation.Rule;
 import org.mintrules.api.Session;
+import org.mintrules.util.Strings;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * Class representing an annotated rule. This class introspects on the rule object to retrieve the attributes and also
@@ -32,7 +34,7 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
 
     private Method getActionMethod(Object rule) {
         Method method = getAnnotatedMethod(rule, Action.class);
-        if( method == null) {
+        if (method == null) {
             throw new IllegalArgumentException("Rule class " + rule.getClass().getCanonicalName() +
                     " must have one method annotated with @Action");
         }
@@ -43,7 +45,7 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
 
     private Method getConditionMethod(Object rule) {
         Method method = getAnnotatedMethod(rule, Condition.class);
-        if( method == null) {
+        if (method == null) {
             throw new IllegalArgumentException("Rule class " + rule.getClass().getCanonicalName() +
                     " must have one method annotated with @Condition");
         }
@@ -72,7 +74,7 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
     }
 
     @Override
-    public R performAction(Session session) {
+    public R executeAction(Session session) {
         try {
             Class<?>[] parameterTypes = actionMethod.getParameterTypes();
             Annotation[][] parameterAnnotations = actionMethod.getParameterAnnotations();
@@ -92,23 +94,49 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
         }
     }
 
+    /**
+     * Finds one annotated method. This
+     *
+     * @param rule Rule object to search
+     * @param annotation Annotation to find
+     * @return The annotated method or null if there's no annotated method.
+     * @throws IllegalArgumentException if there's more than one method annotated with a given annotation.
+     */
     private static Method getAnnotatedMethod(Object rule, Class<? extends Annotation> annotation) {
-        Method[] methods;
+        Set<Method> methods = getAnnotatedMethods(rule, annotation);
+        if (methods.size() > 1) {
+            throw new IllegalArgumentException("More than one method found with the annotation @"
+                    + annotation.getSimpleName() + " [" + Strings.join(methods, ",") + "]");
+        } else if ( methods.size() == 0) {
+            return null;
+        } else {
+            return methods.iterator().next();
+        }
+    }
 
-        methods = rule.getClass().getMethods();
-        for (Method method : methods) {
+    /**
+     * Finds annotatedMethods. Because of how java reflection works, this method goes through Class.getMethods() and
+     * Class.getDeclaredMethods() to allow methods which are not public.
+     *
+     * @param rule Rule object to search
+     * @param annotation Annotation to find
+     * @return a Set with all the matching methods.
+     */
+    private static Set<Method> getAnnotatedMethods(Object rule, Class<? extends Annotation> annotation) {
+        Set<Method> candidateMethods = new HashSet<Method>();
+
+        for (Method method : rule.getClass().getMethods()) {
             if (method.isAnnotationPresent(annotation)) {
-                return method;
+                candidateMethods.add(method);
             }
         }
-        methods = rule.getClass().getDeclaredMethods();
-        for (Method method : methods) {
+        for (Method method : rule.getClass().getDeclaredMethods()) {
             if (method.isAnnotationPresent(annotation)) {
-                return method;
+                candidateMethods.add(method);
             }
         }
 
-        return null;
+        return candidateMethods;
     }
 
     private static int getAnnotatedPriority(Object rule) {
@@ -146,7 +174,7 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
 
     private static Rule getRuleAnnotation(Object rule) {
         Rule annotation = rule.getClass().getAnnotation(Rule.class);
-        if( annotation == null) {
+        if (annotation == null) {
             throw new IllegalArgumentException("Rule class " + rule.getClass().getCanonicalName() +
                     " must be annotated with @Rule");
         }

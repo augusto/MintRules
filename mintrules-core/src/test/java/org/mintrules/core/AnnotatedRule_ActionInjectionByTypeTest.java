@@ -22,7 +22,7 @@ public class AnnotatedRule_ActionInjectionByTypeTest {
         session.put(100);
         session.put("str");
 
-        assertThat(annotatedRule.performAction(session)).isEqualTo("str-100");
+        assertThat(annotatedRule.executeAction(session)).isEqualTo("str-100");
     }
 
     @Test
@@ -35,7 +35,7 @@ public class AnnotatedRule_ActionInjectionByTypeTest {
         expectedException.expect(RuntimeException.class);
         expectedException.expectMessage("Couldn't find an instance of java.lang.Integer");
 
-        annotatedRule.performAction(session);
+        annotatedRule.executeAction(session);
     }
 
     @Test
@@ -50,7 +50,7 @@ public class AnnotatedRule_ActionInjectionByTypeTest {
         expectedException.expect(RuntimeException.class);
         expectedException.expectMessage("More than one instance of java.lang.Integer was found ['one', 'two']");
 
-        annotatedRule.performAction(session);
+        annotatedRule.executeAction(session);
     }
 
     @Rule

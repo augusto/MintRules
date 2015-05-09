@@ -31,8 +31,8 @@ public class AnnotatedRulesEngine_PriorityTest {
         Session session = annotatedRulesEngine.createSession();
 
         assertThat(annotatedRulesEngine.getSortedRules()).hasSize(2);
-        assertThat(annotatedRulesEngine.getSortedRules().get(0).performAction(session)).isEqualTo("rule2");
-        assertThat(annotatedRulesEngine.getSortedRules().get(1).performAction(session)).isEqualTo("rule1");
+        assertThat(annotatedRulesEngine.getSortedRules().get(0).executeAction(session)).isEqualTo("rule2");
+        assertThat(annotatedRulesEngine.getSortedRules().get(1).executeAction(session)).isEqualTo("rule1");
     }
 }
 

@@ -40,6 +40,6 @@ public interface Rule<R> {
      *
      * @throws Exception thrown if an exception occurs during actions performing
      */
-    R performAction(Session session);
+    R executeAction(Session session);
 
 }

@@ -41,6 +41,26 @@ public class AnnotatedRule_RuleValidationTest {
         new AnnotatedRule<Void>(new RuleWithNoActionMethod());
     }
 
+    @Test
+    public void ruleObject_ShouldHaveNoMoreThanOneConditionAnnotation() {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("More than one method found with the annotation @Condition ");
+        expectedException.expectMessage("RuleWithTwoConditionAnnotations.condition1()");
+        expectedException.expectMessage("RuleWithTwoConditionAnnotations.condition2()");
+
+        new AnnotatedRule<Void>(new RuleWithTwoConditionAnnotations());
+    }
+
+    @Test
+    public void ruleObject_ShouldHaveNoMoreThanOneActionAnnotation() {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("More than one method found with the annotation @Action ");
+        expectedException.expectMessage("RuleWithTwoActionAnnotations.action1()");
+        expectedException.expectMessage("RuleWithTwoActionAnnotations.action2()");
+
+        new AnnotatedRule<Void>(new RuleWithTwoActionAnnotations());
+    }
+
     static class RuleWithNoRuleAnnotation {
         @Condition
         boolean condition() {
@@ -66,4 +86,39 @@ public class AnnotatedRule_RuleValidationTest {
             return false;
         }
     }
+
+    @Rule
+    static class RuleWithTwoConditionAnnotations {
+        @Condition
+        boolean condition1() {
+            return false;
+        }
+
+        @Condition
+        boolean condition2() {
+            return false;
+        }
+
+        @Action
+        void action() {
+        }
+    }
+
+    @Rule
+    static class RuleWithTwoActionAnnotations {
+        @Condition
+        boolean condition() {
+            return false;
+        }
+
+        @Action
+        void action1() {
+
+        }
+
+        @Action
+        void action2() {
+        }
+    }
+
 }

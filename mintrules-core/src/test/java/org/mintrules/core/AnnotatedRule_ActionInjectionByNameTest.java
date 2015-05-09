@@ -24,7 +24,7 @@ public class AnnotatedRule_ActionInjectionByNameTest {
         session.put("one", "one");
         session.put("two", "two");
 
-        assertThat(annotatedRule.performAction(session)).isEqualTo("one-two");
+        assertThat(annotatedRule.executeAction(session)).isEqualTo("one-two");
     }
 
     @Test
@@ -37,7 +37,7 @@ public class AnnotatedRule_ActionInjectionByNameTest {
         expectedException.expect(RuntimeException.class);
         expectedException.expectMessage("Couldn't find a parameter with the value 'one'");
 
-        annotatedRule.performAction(session);
+        annotatedRule.executeAction(session);
     }
 
     @Test
@@ -52,7 +52,7 @@ public class AnnotatedRule_ActionInjectionByNameTest {
         expectedException.expect(RuntimeException.class);
         expectedException.expectMessage("Incompatible types. The parameter with key 'one' requires an instance of java.lang.String, but got an instance of java.math.BigDecimal");
 
-        annotatedRule.performAction(session);
+        annotatedRule.executeAction(session);
     }
 
     @Rule
