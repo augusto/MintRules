@@ -7,15 +7,29 @@ import org.mintrules.api.Rule;
  * priority.
  */
 public abstract class AbstractRule<R> implements Comparable<Rule>, Rule<R> {
-    private int priority;
+    private final String name;
+    private final int priority;
+    private final String description;
 
-    public AbstractRule(int priority) {
+    public AbstractRule(String name, int priority, String description) {
+        this.name = name;
         this.priority = priority;
+        this.description = description;
     }
 
     @Override
     public int getPriority() {
         return priority;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
     }
 
     @Override
@@ -26,8 +40,8 @@ public abstract class AbstractRule<R> implements Comparable<Rule>, Rule<R> {
     @Override
     public String toString() {
         return "Rule{" +
-                "name=" + getName() +
-                ",description=" + getDescription() +
+                "name=" + name +
+                ",description=" + description +
                 ",priority=" + priority +
                 '}';
     }

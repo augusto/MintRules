@@ -19,7 +19,7 @@ public class AbstractRuleTest {
     class PrioritisedRule extends AbstractRule<String> {
 
         public PrioritisedRule(int priority) {
-            super(priority);
+            super("", priority, "");
         }
 
         @Override

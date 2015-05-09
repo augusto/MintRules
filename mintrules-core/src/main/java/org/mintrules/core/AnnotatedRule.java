@@ -22,24 +22,34 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
     private final Method actionMethod;
 
     public AnnotatedRule(Object rule) {
-        super(getAnnotatedPriority(rule));
+        super(getAnnotatedRuleName(rule), getAnnotatedPriority(rule), getAnnotatedDescription(rule));
         this.rule = rule;
         //TODO check condition returns boolean (with lower case)
         //TODO check action returns correct data type
-        conditionMethod = getAnnotatedMethod(rule, Condition.class);
-        conditionMethod.setAccessible(true);
-        actionMethod = getAnnotatedMethod(rule, Action.class);
-        actionMethod.setAccessible(true);
+        conditionMethod = getConditionMethod(rule);
+        actionMethod = getActionMethod(rule);
     }
 
-    @Override
-    public String getName() {
-        return getAnnotatedRuleName(rule);
+    private Method getActionMethod(Object rule) {
+        Method method = getAnnotatedMethod(rule, Action.class);
+        if( method == null) {
+            throw new IllegalArgumentException("Rule class " + rule.getClass().getCanonicalName() +
+                    " must have one method annotated with @Action");
+        }
+
+        method.setAccessible(true);
+        return method;
     }
 
-    @Override
-    public String getDescription() {
-        return getAnnotatedDescription(rule);
+    private Method getConditionMethod(Object rule) {
+        Method method = getAnnotatedMethod(rule, Condition.class);
+        if( method == null) {
+            throw new IllegalArgumentException("Rule class " + rule.getClass().getCanonicalName() +
+                    " must have one method annotated with @Condition");
+        }
+        method.setAccessible(true);
+
+        return method;
     }
 
     @Override
@@ -83,12 +93,21 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
     }
 
     private static Method getAnnotatedMethod(Object rule, Class<? extends Annotation> annotation) {
-        Method[] methods = rule.getClass().getMethods();
+        Method[] methods;
+
+        methods = rule.getClass().getMethods();
         for (Method method : methods) {
             if (method.isAnnotationPresent(annotation)) {
                 return method;
             }
         }
+        methods = rule.getClass().getDeclaredMethods();
+        for (Method method : methods) {
+            if (method.isAnnotationPresent(annotation)) {
+                return method;
+            }
+        }
+
         return null;
     }
 
@@ -109,7 +128,7 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
     }
 
     private static String getAnnotatedRuleName(Object rule) {
-        Rule annotation = rule.getClass().getAnnotation(Rule.class);
+        Rule annotation = getRuleAnnotation(rule);
 
         String name = annotation.name();
         if (name.isEmpty()) {
@@ -120,8 +139,17 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
     }
 
     private static String getAnnotatedDescription(Object rule) {
-        Rule annotation = rule.getClass().getAnnotation(Rule.class);
+        Rule annotation = getRuleAnnotation(rule);
 
         return annotation.description();
+    }
+
+    private static Rule getRuleAnnotation(Object rule) {
+        Rule annotation = rule.getClass().getAnnotation(Rule.class);
+        if( annotation == null) {
+            throw new IllegalArgumentException("Rule class " + rule.getClass().getCanonicalName() +
+                    " must be annotated with @Rule");
+        }
+        return annotation;
     }
 }
