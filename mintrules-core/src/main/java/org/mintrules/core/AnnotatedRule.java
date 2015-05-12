@@ -6,12 +6,12 @@ import org.mintrules.annotation.Priority;
 import org.mintrules.annotation.Rule;
 import org.mintrules.api.RuleException;
 import org.mintrules.api.Session;
+import org.mintrules.util.Reflector;
 import org.mintrules.util.Strings;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -50,6 +50,9 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
         if (method == null) {
             throw new IllegalArgumentException("Rule class " + rule.getClass().getCanonicalName() +
                     " must have one method annotated with @Condition");
+        } else if(!method.getReturnType().equals(boolean.class)) {
+            throw new IllegalArgumentException("Condition method " + method.toString() +
+                    " must return a boolean (primitive) value");
         }
         method.setAccessible(true);
 
@@ -59,14 +62,7 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
     @Override
     public boolean evaluateCondition(Session session) throws RuleException {
         try {
-            Class<?>[] parameterTypes = conditionMethod.getParameterTypes();
-            Annotation[][] parameterAnnotations = conditionMethod.getParameterAnnotations();
-            Object arguments[] = new Object[parameterTypes.length];
-
-            for (int i = 0; i < parameterTypes.length; i++) {
-                arguments[i] = session.getValue(parameterTypes[i], parameterAnnotations[i]);
-            }
-
+            Object[] arguments = buildParameterArray(session, conditionMethod);
             return (Boolean) conditionMethod.invoke(rule, arguments);
         } catch (IllegalAccessException e) {
             throw new RuleException("Exception thrown by condition method: " + conditionMethod.toString() + " from rule " + getName(), e); //this should never happen...right?
@@ -78,15 +74,7 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
     @Override
     public R executeAction(Session session) {
         try {
-            Class<?>[] parameterTypes = actionMethod.getParameterTypes();
-            Annotation[][] parameterAnnotations = actionMethod.getParameterAnnotations();
-            Object arguments[] = new Object[parameterTypes.length];
-
-            for (int i = 0; i < parameterTypes.length; i++) {
-                if (parameterAnnotations.length > 0) {
-                    arguments[i] = session.getValue(parameterTypes[i], parameterAnnotations[i]);
-                }
-            }
+            Object[] arguments = buildParameterArray(session, actionMethod);
 
             return (R) actionMethod.invoke(rule, arguments);
         } catch (IllegalAccessException e) {
@@ -94,6 +82,19 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
         } catch (InvocationTargetException e) {
             throw new RuleException("Exception thrown by action method: " + conditionMethod.toString() + " from rule " + getName(), e.getCause());
         }
+    }
+
+    private Object[] buildParameterArray(Session session, Method actionMethod1) {
+        Class<?>[] parameterTypes = actionMethod1.getParameterTypes();
+        Annotation[][] parameterAnnotations = actionMethod1.getParameterAnnotations();
+        Object arguments[] = new Object[parameterTypes.length];
+
+        for (int i = 0; i < parameterTypes.length; i++) {
+            if (parameterAnnotations.length > 0) {
+                arguments[i] = session.getValue(parameterTypes[i], parameterAnnotations[i]);
+            }
+        }
+        return arguments;
     }
 
     /**
@@ -105,7 +106,7 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
      * @throws IllegalArgumentException if there's more than one method annotated with a given annotation.
      */
     private static Method getAnnotatedMethod(Object rule, Class<? extends Annotation> annotation) {
-        Set<Method> methods = getAnnotatedMethods(rule, annotation);
+        Set<Method> methods = Reflector.getAnnotatedMethods(rule.getClass(), annotation);
         if (methods.size() > 1) {
             throw new IllegalArgumentException("More than one method found with the annotation @"
                     + annotation.getSimpleName() + " [" + Strings.join(methods, ",") + "]");
@@ -116,31 +117,6 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
         }
     }
 
-    /**
-     * Finds annotatedMethods. Because of how java reflection works, this method goes through Class.getMethods() and
-     * Class.getDeclaredMethods() to allow methods which are not public.
-     *
-     * @param rule       Rule object to search
-     * @param annotation Annotation to find
-     * @return a Set with all the matching methods.
-     */
-    private static Set<Method> getAnnotatedMethods(Object rule, Class<? extends Annotation> annotation) {
-        Set<Method> candidateMethods = new HashSet<Method>();
-
-        for (Method method : rule.getClass().getMethods()) {
-            if (method.isAnnotationPresent(annotation)) {
-                candidateMethods.add(method);
-            }
-        }
-        for (Method method : rule.getClass().getDeclaredMethods()) {
-            if (method.isAnnotationPresent(annotation)) {
-                candidateMethods.add(method);
-            }
-        }
-
-        return candidateMethods;
-    }
-
     private static int getAnnotatedPriority(Object rule) {
         Method priorityMethod = getAnnotatedMethod(rule, Priority.class);
 
@@ -148,6 +124,7 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
             return DEFAULT_RULE_PRIORITY;
         } else {
             try {
+                //TODO handle exceptions from this method (and throw a RuleException)
                 return (Integer) priorityMethod.invoke(rule);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);

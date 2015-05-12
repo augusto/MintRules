@@ -61,6 +61,14 @@ public class AnnotatedRule_RuleValidationTest {
         new AnnotatedRule<Void>(new RuleWithTwoActionAnnotations());
     }
 
+    @Test
+    public void ruleObject_ShouldConditionMethodMustReturnBoolean() {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Condition method int org.mintrules.core.AnnotatedRule_RuleValidationTest$RuleWithConditionThatReturnsNonBooleanValue.condition() must return a boolean (primitive) value");
+
+        new AnnotatedRule<Void>(new RuleWithConditionThatReturnsNonBooleanValue());
+    }
+
     static class RuleWithNoRuleAnnotation {
         @Condition
         boolean condition() {
@@ -118,6 +126,18 @@ public class AnnotatedRule_RuleValidationTest {
 
         @Action
         void action2() {
+        }
+    }
+
+    @Rule
+    static class RuleWithConditionThatReturnsNonBooleanValue {
+        @Condition
+        int condition() {
+            return 1;
+        }
+
+        @Action
+        void action() {
         }
     }
 
