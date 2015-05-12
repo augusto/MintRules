@@ -32,14 +32,15 @@ public interface Rule<R> {
      * Rule conditions abstraction : this method encapsulates the rule's conditions.
      *
      * @return true if the rule should be applied, false else
+     * @throws org.mintrules.api.RuleException if there's an error invoking the method.
      */
-    boolean evaluateCondition(Session session);
+    boolean evaluateCondition(Session session) throws RuleException;
 
     /**
      * Rule actions abstraction : this method encapsulates the rule's actions.
      *
      * @throws Exception thrown if an exception occurs during actions performing
      */
-    R executeAction(Session session);
+    R executeAction(Session session) throws RuleException;
 
 }

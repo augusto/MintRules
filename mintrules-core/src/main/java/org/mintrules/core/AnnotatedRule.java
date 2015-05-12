@@ -4,13 +4,15 @@ import org.mintrules.annotation.Action;
 import org.mintrules.annotation.Condition;
 import org.mintrules.annotation.Priority;
 import org.mintrules.annotation.Rule;
+import org.mintrules.api.RuleException;
 import org.mintrules.api.Session;
 import org.mintrules.util.Strings;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Class representing an annotated rule. This class introspects on the rule object to retrieve the attributes and also
@@ -55,7 +57,7 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
     }
 
     @Override
-    public boolean evaluateCondition(Session session) {
+    public boolean evaluateCondition(Session session) throws RuleException {
         try {
             Class<?>[] parameterTypes = conditionMethod.getParameterTypes();
             Annotation[][] parameterAnnotations = conditionMethod.getParameterAnnotations();
@@ -67,9 +69,9 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
 
             return (Boolean) conditionMethod.invoke(rule, arguments);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new RuleException("Exception thrown by condition method: " + conditionMethod.toString() + " from rule " + getName(), e); //this should never happen...right?
         } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
+            throw new RuleException("Exception thrown by condition method: " + conditionMethod.toString() + " from rule " + getName(), e.getCause());
         }
     }
 
@@ -88,16 +90,16 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
 
             return (R) actionMethod.invoke(rule, arguments);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new RuleException("Exception thrown by action method: " + conditionMethod.toString() + " from rule " + getName(), e); //this should never happen...right?
         } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
+            throw new RuleException("Exception thrown by action method: " + conditionMethod.toString() + " from rule " + getName(), e.getCause());
         }
     }
 
     /**
      * Finds one annotated method. This
      *
-     * @param rule Rule object to search
+     * @param rule       Rule object to search
      * @param annotation Annotation to find
      * @return The annotated method or null if there's no annotated method.
      * @throws IllegalArgumentException if there's more than one method annotated with a given annotation.
@@ -107,7 +109,7 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
         if (methods.size() > 1) {
             throw new IllegalArgumentException("More than one method found with the annotation @"
                     + annotation.getSimpleName() + " [" + Strings.join(methods, ",") + "]");
-        } else if ( methods.size() == 0) {
+        } else if (methods.size() == 0) {
             return null;
         } else {
             return methods.iterator().next();
@@ -118,7 +120,7 @@ public class AnnotatedRule<R> extends AbstractRule<R> {
      * Finds annotatedMethods. Because of how java reflection works, this method goes through Class.getMethods() and
      * Class.getDeclaredMethods() to allow methods which are not public.
      *
-     * @param rule Rule object to search
+     * @param rule       Rule object to search
      * @param annotation Annotation to find
      * @return a Set with all the matching methods.
      */

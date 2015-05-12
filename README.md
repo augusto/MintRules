@@ -23,7 +23,6 @@ type (or a subclass of it).
 
 ## TODO
 
-* Handle exceptions triggered from rules in a nicer way rather than wrap them in a RuntimeException
 * Ensure error messages are super clear
 * Validate return type of @Condition, @Action and @Priority methods as rules are registered
 * Separate the mess of reflection (especially the logic to find methods) to another class.
@@ -35,3 +34,4 @@ type (or a subclass of it).
 * Add logging (maybe with bridges for JUL and slf4j)
 * ability to set rule name/description at the time the rule is registered (to report nicer names/descriptions when
   the same rule is used with different parameters.
+* Exception Handling: improve messages so they are not sooo verbose (do not call Method.toString to generate the message)

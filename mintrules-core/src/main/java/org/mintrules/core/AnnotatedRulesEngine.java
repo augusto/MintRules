@@ -1,6 +1,7 @@
 package org.mintrules.core;
 
 import org.mintrules.api.Rule;
+import org.mintrules.api.RuleException;
 import org.mintrules.api.Session;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class AnnotatedRulesEngine<R> extends AbstractRulesEngine<R> {
     }
 
     @Override
-    public R fireRules(Session session) {
+    public R fireRules(Session session) throws RuleException {
         for (Rule<R> rule : getSortedRules()) {
             if (rule.evaluateCondition(session)) {
                 return rule.executeAction(session);
