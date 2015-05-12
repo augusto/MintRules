@@ -1,10 +1,11 @@
 ## What is Mint Rules?
-Mint Rules is a simple rules engine 100% inspired in the super simple library EasyRules by Mahmoud Ben Hassine. Mint
-Rules is useful for cases where EasyRules is too simple, but a far more complex solution (drools anyone?) is not
+Mint Rules is a simple rules engine 100% inspired in the super simple library [EasyRules](http://www.easyrules.org/)
+by [Mahmoud Ben Hassine](https://github.com/benas). Mint Rules is useful for cases where
+[EasyRules](http://www.easyrules.org/) is too simple, but a far more complex solution (drools anyone?) is not
 required.
 
 ## Difference with Easy Rules?
-The rules in EasyRules are usually stateful which leads to having to create a new rules engine per thread, this is the
+The rules in [EasyRules](http://www.easyrules.org/) are usually stateful which leads to having to create a new rules engine per thread, this is the
 price to pay for the beauty and simplicity of EasyRules.
 
 ### Working memory
